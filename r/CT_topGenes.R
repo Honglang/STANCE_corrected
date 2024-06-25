@@ -53,15 +53,24 @@ CT_topGenes <- function(object, CT_of_interest, numTopGenes = 20){
   # Use factor with the levels in the order you want to appear in the plot
   VC_prop.topGene.long$Gene <- factor(VC_prop.topGene.long$Gene, levels = TopGenes.list)
   
+  # Set color palette
+  cols <- colorRampPalette(RColorBrewer::brewer.pal(12, "Set1"))
+  myPal <- cols(length(unique(VC_prop.topGene.long$Component)))
+  
   stacked.bar.plot <- ggplot(VC_prop.topGene.long, aes(x = Gene, y = Variance, fill = Component)) +
     geom_bar(stat = "identity", position = "stack") +  # Ensure bars are stacked
     theme_minimal() +
     scale_fill_brewer(palette = "Paired") + # Use a color palette, adjust as needed
-    labs(x = "Genes", y = "Variance Explained", fill = "Component") +
+    labs(x = "Genes", y = "Variance Explained", fill = "Components") +
+    scale_fill_manual(values = myPal) +
     theme(legend.position = "bottom",
+          legend.direction = "horizontal",
           axis.text.y = element_text(angle = 0, hjust = 0, vjust = 0.5, size = 8, face = "plain"), # Adjust text angle and hjust, vjust for horizontal layout
           axis.text.x = element_text(angle = -45, vjust = 0.5), # Ensure x axis labels (Variance Explained) are readable
-          plot.margin = unit(c(1, 1, 1, 1), "cm"))
+          plot.margin = unit(c(1, 1, 1, 1), "cm"),
+          axis.title.x = element_text(size = 12, face = "bold"),  # Adjust x-axis title size
+          axis.title.y = element_text(size = 12, face = "bold")   # Adjust y-axis title size
+          )
   
   output <- list(cell_type_of_interest = CT_of_interest, 
                  top_genes = TopGenes.list, 
