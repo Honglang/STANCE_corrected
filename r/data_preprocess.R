@@ -29,7 +29,7 @@ data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05){
   pos.use[,2] <- (pos[,2] - min(pos)) / (max(pos) - min(pos))
   cat('The location matrix has been scaled.\n')
   
-  # Spot QC
+  ## Spot QC
   spots.use <- which(colSums(counts) >= spot.threshold)
   counts.use <- counts.normalized[, spots.use]
   pos.use <- pos.use[spots.use, ]
@@ -37,7 +37,14 @@ data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05){
   numSpots.removed <- nrow(pos) - nrow(pos.use)
   cat(paste(numSpots.removed, 'spots with gene expression less than', spot.threshold, 'have been removed. \n'))
   
-  # Gene QC
+  ## Gene QC
+  # Filter out mt genes
+  if (length(grep("mt-", rownames(counts.use), ignore.case = T)) > 0) {
+    mt_gene_list <- grep("mt-", rownames(counts.use), ignore.case = T)
+    counts.use <- counts.use[-mt_gene_list,]
+    cat(paste(length(mt_gene_list), 'mt genes have been removed. \n'))
+  }
+  # Filter out low expressed genes
   ExpR <- apply(counts.use, MARGIN = 1, FUN = function(data.vector){
     non.zero <- sum(data.vector != 0)
     return(non.zero / length(data.vector))
