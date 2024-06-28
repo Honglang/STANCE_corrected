@@ -8,6 +8,8 @@
 #' @param Genes_to_test (default NULL) a vector of character strings
 #' claiming all the genes of interest to test.
 #' If NULL, tests will perform across all the genes.
+#' @param correction (default FALSE) if TRUE, perform a bias correction 
+#' for the approximation of the scaled chi-square distribution.
 #' @param pv.adjust (default "BY") p-value adjustment method, a character string.
 #' @return return STANCE object.
 #' 
@@ -27,7 +29,8 @@ arma::mat invert(const arma::mat& X) {
 runTest2 <- function(object, 
                      Cell_types_to_test = NULL, 
                      Genes_to_test = NULL,
-                     pv.adjust = "BY"){
+                     pv.adjust = "BY",
+                     correction = FALSE){
   if(is.null(object@Covariance_matrices) | is.null(object@Random_effect_design_matrices) | is.null(object@Sigma_k_matrices)){
     stop('Please run \'get_modelMatrices()\' before doing tests.')
   }
@@ -131,7 +134,42 @@ runTest2 <- function(object,
       P3Sigma_lP3 <- P3Sigma_l %*% P3
       
       e <- sum(diag(P3Sigma_l)) / 2
-      v <- sum(diag(P3Sigma_l %*% P3Sigma_l)) / 2
+      
+      if(correction) {
+        # List for P0 %*% Sigma_k, k = 1,...,(l-1),(l+1),...K
+        P3Sigma_k.list <- lapply(1:(K-1), function(k){
+          P3Sigma_k <- P3 %*% Sigma_k.list_l[[k]]
+        })
+        
+        # I_{l,l}
+        I_ll <- sum(diag(P3Sigma_l %*% P3Sigma_l)) / 2
+        
+        # Vector I_{-l, l}
+        I_nll <- sum(diag(P3Sigma_lP3)) / 2
+        for(k in 1:(K-1)){
+          I_nll <- c(I_nll, sum(diag(P3Sigma_l %*% P3Sigma_k.list[[k]])) / 2)
+        }
+        I_nll <- matrix(I_nll, nrow = K)
+        
+        # Matrix I_{-l, -l}
+        I_nlnl <- matrix(rep(0,K*K), ncol = K)
+        I_nlnl[1,1] <- sum(diag(P3 %*% P3))/2
+        for (i in 2:K) {
+          I_nlnl[i,1] <- sum(diag(P3Sigma_k.list[[i - 1]] %*% P3))/2
+          for (j in 2:K) {
+            I_nlnl[i,j] <- sum(diag(P3Sigma_k.list[[i - 1]] %*% P3Sigma_k.list[[j -1]]))/2
+          }
+        }
+        I_nlnl[1,2:K] <- t(I_nlnl[2:K,1])
+        
+        # Matrix I^{-1}_{-l, -l}
+        I_nlnl_inv <- invert(I_nlnl)
+        
+        v <- I_ll - crossprod(I_nll, I_nlnl_inv) %*% I_nll
+      } else {
+        v <- sum(diag(P3Sigma_l %*% P3Sigma_l)) / 2
+      }
+      
       # Test statistic
       # U <- (t(y) %*% P3Sigma_lP3 %*% y) / 2
       U <- (crossprod(y, P3Sigma_lP3) %*% y) / 2
@@ -180,7 +218,40 @@ runTest2 <- function(object,
                                      P3Sigma_lP3 <- P3Sigma_l %*% P3
                                      
                                      e <- sum(diag(P3Sigma_l)) / 2
-                                     v <- sum(diag(P3Sigma_l %*% P3Sigma_l)) / 2
+                                     if(correction) {
+                                       # List for P0 %*% Sigma_k, k = 1,...,(l-1),(l+1),...K
+                                       P3Sigma_k.list <- lapply(1:(K-1), function(k){
+                                         P3Sigma_k <- P3 %*% Sigma_k.list_l[[k]]
+                                       })
+                                       
+                                       # I_{l,l}
+                                       I_ll <- sum(diag(P3Sigma_l %*% P3Sigma_l)) / 2
+                                       
+                                       # Vector I_{-l, l}
+                                       I_nll <- sum(diag(P3Sigma_lP3)) / 2
+                                       for(k in 1:(K-1)){
+                                         I_nll <- c(I_nll, sum(diag(P3Sigma_l %*% P3Sigma_k.list[[k]])) / 2)
+                                       }
+                                       I_nll <- matrix(I_nll, nrow = K)
+                                       
+                                       # Matrix I_{-l, -l}
+                                       I_nlnl <- matrix(rep(0,K*K), ncol = K)
+                                       I_nlnl[1,1] <- sum(diag(P3 %*% P3))/2
+                                       for (i in 2:K) {
+                                         I_nlnl[i,1] <- sum(diag(P3Sigma_k.list[[i - 1]] %*% P3))/2
+                                         for (j in 2:K) {
+                                           I_nlnl[i,j] <- sum(diag(P3Sigma_k.list[[i - 1]] %*% P3Sigma_k.list[[j -1]]))/2
+                                         }
+                                       }
+                                       I_nlnl[1,2:K] <- t(I_nlnl[2:K,1])
+                                       
+                                       # Matrix I^{-1}_{-l, -l}
+                                       I_nlnl_inv <- invert(I_nlnl)
+                                       
+                                       v <- I_ll - crossprod(I_nll, I_nlnl_inv) %*% I_nll
+                                     } else {
+                                       v <- sum(diag(P3Sigma_l %*% P3Sigma_l)) / 2
+                                     }
                                      # Test statistic
                                      # U <- (t(y) %*% P3Sigma_lP3 %*% y) / 2
                                      U <- (crossprod(y, P3Sigma_lP3) %*% y) / 2
@@ -199,10 +270,6 @@ runTest2 <- function(object,
                                    })
       Test2_result_single <- t(Test2_result_single)
       Test2_result_single <- as.data.frame(Test2_result_single)
-      # FDR control
-      Test2_result_single$p_value_adj <- p.adjust(Test2_result_single$p_value,
-                                                  method = pv.adjust,
-                                                  n = length(Test2_result_single$p_value))
     }
     return(Test2_result_single)
   })
