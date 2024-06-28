@@ -1,27 +1,37 @@
 #' @title Preprocess data
 #' @description
 #' Preprocess the gene expression, location coordinate and cell type proportion matrices,
-#' including normalization of count data (use NormalizaData in Seurat package),
-#' scaling of coodinates and quality control at both spot and gene levels.
+#' including normalization of count data (use NormalizeVST in SPARK package),
+#' scaling of coordinates and quality control at both spot and gene levels.
 #' @param object STANCE object
 #' @param spot.threshold (default 10) filter out the spots whose total expression count 
 #' lower than the threshold.
 #' @param gene.threshold (default 0.05) filter out low-expressed genes
 #'whose zero-expression rate lower than the threshold.
+#' @param normalized (default FALSE) "normalized = TRUE" indicates that the gene expression
+#' input is normalized. Skip the normalization step.
 #' @return return STANCE object.
 #' 
 #' @import Seurat
+#' @import SPARK
 #' 
 #' @export
 
-data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05){
+data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05,
+                            normalized = FALSE){
   counts <- object@gene_expression
   prop <- object@cell_type_compositions
   pos <- object@location
   
   ## Normalize count data
-  cat('Normalizing the count data...\n')
-  counts.normalized <- Seurat::NormalizeData(counts)
+  if (normalized) {
+    counts.normalized <- counts
+    gene.threshold <- -Inf
+    spot.threshold <- -Inf
+  } else {
+    cat('Normalizing the count data...\n')
+    counts.normalized <- SPARK::NormalizeVST(counts)
+  }
   
   ## Scale locations
   pos.use <- pos
