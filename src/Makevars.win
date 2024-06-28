@@ -1,0 +1,2 @@
+PKG_CPPFLAGS = -I"$(R_HOME)/library/Rcpp/include" -I"$(R_HOME)/library/RcppArmadillo/include"
+PKG_LIBS = -L"$(R_HOME)/bin/x64" -lRlapack -lRblas

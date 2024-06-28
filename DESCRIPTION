@@ -1,0 +1,34 @@
+Package: STANCE
+Type: Package
+Title: Spatial Transcriptomics ANalysis of genes with Cell-type-specific Expression
+Version: 0.1.0
+Authors@R:
+    c(
+      person(given = "Haohao", family = "Su", email = "suhaohao@msu.edu", role = c("aut", "cre")),
+      person(given = "Yuesong", family = "Wu", email = "wuyuesong@msu.edu", role = "aut"),
+      person(given = "Yuehua", family = "Cui", email = "cuiy@msu.edu", role = "aut")
+    )
+Maintainer: Haohao Su <suhaohao@msu.edu>
+Description: STANCE is A unified statistical model to detect cell type-specific spatially variable genes in spatial transcriptomics.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
+Imports: 
+    ggplot2,
+    grDevices,
+    KRLS (>= 1.0-0),
+    methods,
+    MM4LMM (>= 3.0.2),
+    RColorBrewer,
+    Rcpp,
+    RcppArmadillo,
+    reshape2,
+    SPARK (>= 1.1.1),
+    stats
+Depends: 
+    R (>= 2.10)
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
+Roxygen: list(markdown = TRUE)
