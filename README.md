@@ -20,5 +20,5 @@ library(SPARK)
 ```
 
 ## Detect cell type-specific spatially variable genes (ctSVGs) with STANCE
-The best vignette for getting started with STANCE is [Tutorial](https://htmlpreview.github.io/?https://github.com/Cui-STT-Lab/STANCE/blob/master/vignettes/tutorial.html).
+The best vignette for getting started with STANCE is [Tutorial](https://haroldsu.github.io/STANCE/tutorial.html).
 
