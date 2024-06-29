@@ -1,5 +1,5 @@
 # STANCE: Spatial Transcriptomics ANalysis of genes with Cell-type-specific Expression
-STANCE is a unified statistical model to detect cell type-specific spatially variable genes in spatial transcriptomics
+STANCE is a unified statistical model to detect cell type-specific spatially variable genes (ctSVGs) in spatial transcriptomics.
 
 ## Installation
 Please run the following codes in R to install STANCE package from GitHub.
@@ -18,3 +18,7 @@ if (!require("devtools", quietly = TRUE)){
 devtools::install_github("xzhoulab/SPARK")
 library(SPARK)
 ```
+
+## Detect cell type-specific spatially variable genes (ctSVGs) with STANCE
+The best vignette for getting started with STANCE is [Tutorial]().
+
