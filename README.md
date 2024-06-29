@@ -10,3 +10,11 @@ if (!require("devtools", quietly = TRUE)){
 devtools::install_github("Cui-STT-Lab/STANCE")
 ```
 
+STANCE relies on some functions in [SPARK](https://xzhoulab.github.io/SPARK/), which can be installed by running the following codes in R:
+```
+if (!require("devtools", quietly = TRUE)){
+  install.packages("devtools")
+}
+devtools::install_github("xzhoulab/SPARK")
+library(SPARK)
+```
