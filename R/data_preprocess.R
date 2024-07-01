@@ -7,7 +7,7 @@
 #' @param spot.threshold (default 10) filter out the spots whose total expression count
 #' lower than the threshold.
 #' @param gene.threshold (default 0.05) filter out low-expressed genes
-#'whose zero-expression rate lower than the threshold.
+#'whose expression rate lower than the threshold.
 #' @param normalized (default FALSE) "normalized = TRUE" indicates that the gene expression
 #' input is normalized. Skip the normalization step.
 #' @return return STANCE object.
@@ -54,14 +54,15 @@ data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05,
     cat(paste(length(mt_gene_list), 'mt genes have been removed. \n'))
   }
   # Filter out low expressed genes
-  ExpR <- apply(counts.use, MARGIN = 1, FUN = function(data.vector){
+  # Gene expression rate
+  ExpRate <- apply(counts[, spots.use], MARGIN = 1, FUN = function(data.vector){
     non.zero <- sum(data.vector != 0)
     return(non.zero / length(data.vector))
   })
-  gene.use <- intersect(names(ExpR[ExpR >= gene.threshold]), rownames(counts.use))
+  gene.use <- intersect(names(ExpRate[ExpRate >= gene.threshold]), rownames(counts.use))
   counts.use <- counts.use[match(gene.use, rownames(counts.use)),]
   numGenes.removed <- nrow(counts) - nrow(counts.use)
-  cat(paste(numGenes.removed, 'genes with gene zero expression rate less than', gene.threshold, 'have been removed. \n'))
+  cat(paste(numGenes.removed, 'genes with gene expression rate less than', gene.threshold, 'have been removed. \n'))
 
   object@gene_expression <- as.matrix(counts.use)
   object@location <- pos.use

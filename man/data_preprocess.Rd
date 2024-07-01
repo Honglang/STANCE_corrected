@@ -18,7 +18,7 @@ data_preprocess(
 lower than the threshold.}
 
 \item{gene.threshold}{(default 0.05) filter out low-expressed genes
-whose zero-expression rate lower than the threshold.}
+whose expression rate lower than the threshold.}
 
 \item{normalized}{(default FALSE) "normalized = TRUE" indicates that the gene expression
 input is normalized. Skip the normalization step.}
