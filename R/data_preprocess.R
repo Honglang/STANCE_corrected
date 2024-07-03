@@ -22,14 +22,10 @@ data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05,
   prop <- object@cell_type_compositions
   pos <- object@location
 
-  ## Normalize count data
   if (normalized) {
     counts.normalized <- counts
     gene.threshold <- -Inf
     spot.threshold <- -Inf
-  } else {
-    cat('Normalizing the count data...\n')
-    counts.normalized <- SPARK::NormalizeVST(counts)
   }
 
   ## Scale locations
@@ -40,7 +36,7 @@ data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05,
 
   ## Spot QC
   spots.use <- which(colSums(counts) >= spot.threshold)
-  counts.use <- counts.normalized[, spots.use]
+  counts.use <- counts[, spots.use]
   pos.use <- pos.use[spots.use, ]
   prop.use <- prop[spots.use,]
   numSpots.removed <- nrow(pos) - nrow(pos.use)
@@ -55,7 +51,7 @@ data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05,
   }
   # Filter out low expressed genes
   # Gene expression rate
-  ExpRate <- apply(counts[, spots.use], MARGIN = 1, FUN = function(data.vector){
+  ExpRate <- apply(counts.use[, spots.use], MARGIN = 1, FUN = function(data.vector){
     non.zero <- sum(data.vector != 0)
     return(non.zero / length(data.vector))
   })
@@ -64,7 +60,13 @@ data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05,
   numGenes.removed <- nrow(counts) - nrow(counts.use)
   cat(paste(numGenes.removed, 'genes with gene expression rate less than', gene.threshold, 'have been removed. \n'))
 
-  object@gene_expression <- as.matrix(counts.use)
+  ## Normalize count data
+  if (!normalized) {
+    cat('Normalizing the count data...\n')
+    counts.normalized <- SPARK::NormalizeVST(counts.use)
+  }
+
+  object@gene_expression <- as.matrix(counts.normalized)
   object@location <- pos.use
   object@cell_type_compositions <- prop.use
   object@original_location <- pos

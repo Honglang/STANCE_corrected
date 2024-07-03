@@ -1,20 +1,16 @@
 #' @title An S4 class to store key information.
 #'
-#' @slot gene_expression The gene expression matrix with genes in rows 
+#' @slot gene_expression The gene expression matrix with genes in rows
 #' and spots in columns.
 #' @slot location The location coordinate matrix of spots.
-#' @slot cell_type_compositions The cell type composition matrix 
+#' @slot cell_type_compositions The cell type composition matrix
 #' to store cell type proportion at each spot.
 #' Rows represent spots and columns represent cell types.
 #' @slot covariates The covariate design matrix modeling gene expression.
 #' @slot cell_types Cell types included in this experiment.
-#' @slot kernel The kernel matrix to capture spatial correlation. 
+#' @slot kernel The kernel matrix to capture spatial correlation.
 #' The default is a Gaussian kernel matrix.
 #' @slot bandwidth The bandwidth parameter of Gaussian kernel.
-#' @slot Covariance_matrices A list for covariance matrices 
-#' of all the random effects, including error term.
-#' @slot Random_effect_design_matrices A list for the design matrices 
-#' of all the random effects, including error term.
 #' @slot Sigma_k_matrices A list for Sigma_k matrices.
 #' @slot Test_1 The results of STANCE Test 1 (overall test for SVGs and ctSVGs),
 #' containing the test statistic values, p values and possibly adjusted p values
@@ -23,7 +19,7 @@
 #' containing the test statistic values, p values and possibly adjusted p values
 #' for each gene and each cell type of interest.
 #' @slot VarComp_estimates The ReML estimates of all the variance components for each gene.
-#' @slot cell_type_top_genes The top significant genes with highest proportion of variance 
+#' @slot cell_type_top_genes The top significant genes with highest proportion of variance
 #' explained by the spatial effect corresponding to the cell type of interest.
 #' @slot original_gene_expression Used only after the normalization of expression count data
 #' and the quality control steps,
@@ -44,8 +40,6 @@ setClass("STANCE", slots = list(
   cell_types = "character",
   kernel = "ANY",
   bandwidth = "numeric",
-  Covariance_matrices = "ANY",
-  Random_effect_design_matrices = "ANY",
   Sigma_k_matrices = "ANY",
   Test_1 = "ANY",
   Test_2 = "ANY",

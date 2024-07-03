@@ -2,18 +2,19 @@
 % Please edit documentation in R/build_kernelMatrix.R
 \name{build_kernelMatrix}
 \alias{build_kernelMatrix}
-\title{Build the Gaussian kernel matrix}
+\title{Build the Gaussian kernel matrix and compute covariance matrices}
 \usage{
 build_kernelMatrix(object)
 }
 \arguments{
-\item{object}{the ... object.}
+\item{object}{the STANCE object.}
 }
 \value{
-return ... object with the Gaussian kernel matrix.
+return STANCE object with the Gaussian kernel matrix.
 }
 \description{
-Build the Gaussian kernel matrix to model spatial correlation between spots.
+Build the Gaussian kernel matrix to model spatial correlation between spots, and
+then contruct covariance matrices (Sigma_k) for all the variance components.
 The Gaussian kernel bandwidth will be selected automatically:
 for datasets with 5000 spots or fewer,
 non-parametric Sheather-Jones' bandwidths are computed for each gene,

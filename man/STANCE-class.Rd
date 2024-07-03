@@ -28,12 +28,6 @@ The default is a Gaussian kernel matrix.}
 
 \item{\code{bandwidth}}{The bandwidth parameter of Gaussian kernel.}
 
-\item{\code{Covariance_matrices}}{A list for covariance matrices
-of all the random effects, including error term.}
-
-\item{\code{Random_effect_design_matrices}}{A list for the design matrices
-of all the random effects, including error term.}
-
 \item{\code{Sigma_k_matrices}}{A list for Sigma_k matrices.}
 
 \item{\code{Test_1}}{The results of STANCE Test 1 (overall test for SVGs and ctSVGs),

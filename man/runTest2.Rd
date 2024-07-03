@@ -8,7 +8,6 @@ runTest2(
   object,
   Cell_types_to_test = NULL,
   Genes_to_test = NULL,
-  pv.adjust = "BY",
   correction = FALSE
 )
 }
@@ -22,8 +21,6 @@ If NULL, tests will perform across all the cell types.}
 \item{Genes_to_test}{(default NULL) a vector of character strings
 claiming all the genes of interest to test.
 If NULL, tests will perform across all the genes.}
-
-\item{pv.adjust}{(default "BY") p-value adjustment method, a character string.}
 
 \item{correction}{(default FALSE) if TRUE, perform a bias correction
 for the approximation of the scaled chi-square distribution.}
