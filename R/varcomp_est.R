@@ -46,6 +46,6 @@ varcomp_est <- function(object, Genes_to_est = NULL, ncores = 1){
   Est_result <- do.call(rbind, Est_result)
   rownames(Est_result) <- rownames(counts.use)
 
-  object@VarComp_estimates <- as.data.frame(t(Est_result))
+  object@VarComp_estimates <- as.data.frame(Est_result)
   return(object)
 }
