@@ -25,7 +25,8 @@ Imports:
     RcppArmadillo,
     reshape2,
     SPARK (>= 1.1.1),
-    stats
+    stats,
+    parallel
 Depends: 
     R (>= 2.10)
 LinkingTo: 

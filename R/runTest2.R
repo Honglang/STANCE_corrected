@@ -10,16 +10,20 @@
 #' If NULL, tests will perform across all the genes.
 #' @param correction (default FALSE) if TRUE, perform a bias correction
 #' for the approximation of the scaled chi-square distribution.
+#' @param ncores (default 1) an integer value of number of CPU cores to use
+#' when running Test2.
 #' @return return STANCE object.
 #'
 #' @import gaston
+#' @import parallel
 #'
 #' @export
 
 runTest2 <- function(object,
                      Cell_types_to_test = NULL,
                      Genes_to_test = NULL,
-                     correction = FALSE){
+                     correction = FALSE,
+                     ncores = 1){
   if(is.null(object@kernel) | is.null(object@Sigma_k_matrices)){
     stop('Please run \'build_kernelMatrix()\' before doing tests.')
   }
@@ -71,7 +75,8 @@ runTest2 <- function(object,
   X <- cbind(matrix(1, nrow = n), object@covariates)
   Xt <- t(X)
 
-  Test2_result <- lapply(1:length(CT_to_test_index), function(i){
+  Test2_result <- parallel::mclapply(1:length(CT_to_test_index), mc.cores = ncores,
+                                     function(i){
     iCT <- CT_to_test_index[i]
     #if(length(Genes_to_test_index) == 1)
     # Test3_result_single <- sapply(object@gene_expression[Genes_to_test_index,], function(y))

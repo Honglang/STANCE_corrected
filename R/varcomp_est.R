@@ -5,13 +5,15 @@
 #' @param Genes_to_est (default NULL) a vector of character strings
 #' claiming all the genes of interest to estimate.
 #' If NULL, estimation of variance components will perform across all the genes.
+#' @param ncores (default 1) an integer value of number of CPU cores to use
+#' when running variance component estimation.
 #' @return return STANCE object.
 #'
 #' @import gaston
 #'
 #' @export
 
-varcomp_est <- function(object, Genes_to_est = NULL){
+varcomp_est <- function(object, Genes_to_est = NULL, ncores = 1){
   n <- dim(object@gene_expression)[2]
   K <- dim(object@cell_type_compositions)[2]
   numGenes <- dim(object@gene_expression)[1]
@@ -30,7 +32,8 @@ varcomp_est <- function(object, Genes_to_est = NULL){
     counts.use <- counts
   }
 
-  Est_result <- apply(counts.use, MARGIN = 1, function(y){
+  Est_result <- mclapply(1:nrow(counts.use), function(i) {
+    y <- counts.use[i, ]
     ## Full model
     model.full <- gaston::lmm.aireml(Y = y, X = X,
                                      K = object@Sigma_k_matrices,
@@ -38,7 +41,10 @@ varcomp_est <- function(object, Genes_to_est = NULL){
     output <- c(model.full$tau, model.full$sigma2)
     names(output) <- c(object@cell_types, "Error_residuals")
     return(output)
-  })
+  }, mc.cores = ncores)
+
+  Est_result <- do.call(rbind, Est_result)
+  rownames(Est_result) <- rownames(counts.use)
 
   object@VarComp_estimates <- as.data.frame(t(Est_result))
   return(object)

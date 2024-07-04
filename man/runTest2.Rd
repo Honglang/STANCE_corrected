@@ -8,7 +8,8 @@ runTest2(
   object,
   Cell_types_to_test = NULL,
   Genes_to_test = NULL,
-  correction = FALSE
+  correction = FALSE,
+  ncores = 1
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ If NULL, tests will perform across all the genes.}
 
 \item{correction}{(default FALSE) if TRUE, perform a bias correction
 for the approximation of the scaled chi-square distribution.}
+
+\item{ncores}{(default 1) an integer value of number of CPU cores to use
+when running Test2.}
 }
 \value{
 return STANCE object.

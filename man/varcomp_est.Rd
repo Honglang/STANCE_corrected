@@ -4,7 +4,7 @@
 \alias{varcomp_est}
 \title{Estimate the variance components for STANCE model}
 \usage{
-varcomp_est(object, Genes_to_est = NULL)
+varcomp_est(object, Genes_to_est = NULL, ncores = 1)
 }
 \arguments{
 \item{object}{STANCE object}
@@ -12,6 +12,9 @@ varcomp_est(object, Genes_to_est = NULL)
 \item{Genes_to_est}{(default NULL) a vector of character strings
 claiming all the genes of interest to estimate.
 If NULL, estimation of variance components will perform across all the genes.}
+
+\item{ncores}{(default 1) an integer value of number of CPU cores to use
+when running variance component estimation.}
 }
 \value{
 return STANCE object.
