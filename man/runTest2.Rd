@@ -27,7 +27,7 @@ If NULL, tests will perform across all the genes.}
 for the approximation of the scaled chi-square distribution.}
 
 \item{ncores}{(default 1) an integer value of number of CPU cores to use
-when running Test2.}
+when running Test2. It works only when there are more than one genes to be tested.}
 }
 \value{
 return STANCE object.
