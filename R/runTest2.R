@@ -253,6 +253,7 @@ runTest2 <- function(object,
 
       Test2_result_single <- do.call(rbind, Test2_result_single)
       rownames(Test2_result_single) <- rownames(object@gene_expression)[Genes_to_test_index]
+      Test2_result_single <- as.data.frame(Test2_result_single)
 
       return(Test2_result_single)
     })

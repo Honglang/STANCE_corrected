@@ -11,6 +11,7 @@
 #' @param numTopGenes (default 20) number of top genes to display.
 #' If the number of significant genes is less than this given number,
 #' then all significant genes will be displayed.
+#' @param p.threshold (default 0.05) the threshold of p-values for detecting ctSVGs
 #' @return return STANCE object.
 #'
 #' @import ggplot2
@@ -20,7 +21,7 @@
 #'
 #' @export
 
-CT_topGenes <- function(object, CT_of_interest, numTopGenes = 20){
+CT_topGenes <- function(object, CT_of_interest, numTopGenes = 20, p.threshold = 0.05){
   if(is.null(object@VarComp_estimates)) {
     stop('No estimate of variance components found. Please do \'varcomp_est()\'before this step.')
   }
@@ -34,7 +35,7 @@ CT_topGenes <- function(object, CT_of_interest, numTopGenes = 20){
   VC_prop <- as.data.frame(t(VC_prop))
 
   Test2_result <- object@Test_2[[CT_of_interest]]
-  SigGenes.list <- row.names(Test2_result)[Test2_result$p_value < 0.05]
+  SigGenes.list <- row.names(Test2_result)[Test2_result$p_value < p.threshold]
   numTopGenes <- min(length(SigGenes.list), 20)
 
   VC_prop.sorted <- VC_prop[order(VC_prop[,CT_of_interest], decreasing = T),]

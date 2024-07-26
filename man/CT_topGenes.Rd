@@ -4,7 +4,7 @@
 \alias{CT_topGenes}
 \title{Display top genes for the cell type of interest given}
 \usage{
-CT_topGenes(object, CT_of_interest, numTopGenes = 20)
+CT_topGenes(object, CT_of_interest, numTopGenes = 20, p.threshold = 0.05)
 }
 \arguments{
 \item{object}{STANCE object}
@@ -14,6 +14,8 @@ CT_topGenes(object, CT_of_interest, numTopGenes = 20)
 \item{numTopGenes}{(default 20) number of top genes to display.
 If the number of significant genes is less than this given number,
 then all significant genes will be displayed.}
+
+\item{p.threshold}{(default 0.05) the threshold of p-values for detecting ctSVGs}
 }
 \value{
 return STANCE object.
