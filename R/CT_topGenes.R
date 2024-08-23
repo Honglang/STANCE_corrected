@@ -12,6 +12,9 @@
 #' If the number of significant genes is less than this given number,
 #' then all significant genes will be displayed.
 #' @param p.threshold (default 0.05) the threshold of p-values for detecting ctSVGs
+#' @param axis.text.size.x (default 8) text size of x axis
+#' @param axis.text.size.y (default 8) text size of y axis
+#' @param axis.text.angle.x (default -45) rotation angle of x axis text
 #' @return return STANCE object.
 #'
 #' @import ggplot2
@@ -21,7 +24,8 @@
 #'
 #' @export
 
-CT_topGenes <- function(object, CT_of_interest, numTopGenes = 20, p.threshold = 0.05){
+CT_topGenes <- function(object, CT_of_interest, numTopGenes = 20, p.threshold = 0.05,
+                        axis.text.size.x = 8, axis.text.size.y = 8, axis.text.angle.x = -45){
   if(is.null(object@VarComp_estimates)) {
     stop('No estimate of variance components found. Please do \'varcomp_est()\'before this step.')
   }
@@ -58,12 +62,13 @@ CT_topGenes <- function(object, CT_of_interest, numTopGenes = 20, p.threshold = 
     geom_bar(stat = "identity", position = "stack") +  # Ensure bars are stacked
     theme_minimal() +
     scale_fill_brewer(palette = "Paired") + # Use a color palette, adjust as needed
-    labs(x = "Genes", y = "Variance Explained", fill = "Components") +
+    labs(x = "Genes", y = "Variance Explained", fill = "Components",
+         title = CT_of_interest) +
     scale_fill_manual(values = myPal) +
     theme(legend.position = "bottom",
           legend.direction = "horizontal",
-          axis.text.y = element_text(angle = 0, hjust = 0, vjust = 0.5, size = 8, face = "plain"), # Adjust text angle and hjust, vjust for horizontal layout
-          axis.text.x = element_text(angle = -45, vjust = 0.5), # Ensure x axis labels (Variance Explained) are readable
+          axis.text.y = element_text(angle = 0, hjust = 0, vjust = 0.5, size = axis.text.size.y, face = "plain"), # Adjust text angle and hjust, vjust for horizontal layout
+          axis.text.x = element_text(angle = axis.text.angle.x, vjust = 0.5, size = axis.text.size.x),
           plot.margin = unit(c(1, 1, 1, 1), "cm"),
           axis.title.x = element_text(size = 12, face = "bold"),  # Adjust x-axis title size
           axis.title.y = element_text(size = 12, face = "bold")   # Adjust y-axis title size
