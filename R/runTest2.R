@@ -75,6 +75,8 @@ runTest2 <- function(object,
   X <- cbind(matrix(1, nrow = n), object@covariates)
   Xt <- t(X)
 
+  cat('Start running STANCE Stage 2 test...\n')
+
   if(length(Genes_to_test_index) == 1){
     y <- object@gene_expression[Genes_to_test_index,]
     Test2_result <- lapply(1:length(CT_to_test_index),function(i){

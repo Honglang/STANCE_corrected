@@ -47,7 +47,6 @@ data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05,
   if (length(grep("mt-", rownames(counts.use), ignore.case = T)) > 0) {
     mt_gene_list <- grep("mt-", rownames(counts.use), ignore.case = T)
     counts.use <- counts.use[-mt_gene_list,]
-    cat(paste(length(mt_gene_list), 'mt genes have been removed. \n'))
   }
   # Filter out low expressed genes
   # Gene expression rate
@@ -58,7 +57,7 @@ data_preprocess <- function(object, spot.threshold = 10, gene.threshold = 0.05,
   gene.use <- intersect(names(ExpRate[ExpRate >= gene.threshold]), rownames(counts.use))
   counts.use <- counts.use[match(gene.use, rownames(counts.use)),]
   numGenes.removed <- nrow(counts) - nrow(counts.use)
-  cat(paste(numGenes.removed, 'genes with gene expression rate less than', gene.threshold, 'have been removed. \n'))
+  cat(paste(numGenes.removed, 'mt genes and the genes with gene expression rate less than', gene.threshold, 'have been removed. \n'))
 
   ## Normalize count data
   if (!normalized) {

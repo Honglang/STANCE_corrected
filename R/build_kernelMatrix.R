@@ -18,6 +18,7 @@ build_kernelMatrix <- function(object){
   if(is.null(object@original_gene_expression) | is.null(object@original_location) | is.null(object@original_cell_type_compositions)){
     stop('Please run \'data_preprocess()\'  before building the kernel matrix.')
   }
+  cat('Building kernel matrix...\n')
   counts <- object@gene_expression
   pos <- object@location
   n <- nrow(counts)
@@ -40,7 +41,7 @@ build_kernelMatrix <- function(object){
 
   # Number of cell types
   K <- dim(object@cell_type_compositions)[2]
-
+  cat('Computing covariance matrices...\n')
   # List for Sigma_k & Sigma matrices
   Sigma_k.list <- lapply(1:K, function(k, obj = object){
     REDesign <- diag(obj@cell_type_compositions[,k])

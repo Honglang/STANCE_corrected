@@ -1,7 +1,7 @@
 Package: STANCE
 Type: Package
 Title: Spatial Transcriptomics ANalysis of genes with Cell-type-specific Expression
-Version: 0.2.3
+Version: 0.3.0
 Authors@R:
     c(
       person(given = "Haohao", family = "Su", email = "suhaohao@msu.edu", role = c("aut", "cre")),

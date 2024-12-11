@@ -36,6 +36,8 @@ runTest1 <- function(object, correction = FALSE, pv.adjust = "BY"){
   P0tildeSigma <- P0tilde %*% Sigma
   P0tildeSigmaP0tilde <- P0tildeSigma %*% P0tilde
 
+  cat('Start running STANCE Stage 1 test...\n')
+
   # Test 1 statistic & the estimates of beta and sigma2
   Test1_result <- apply(object@gene_expression, MARGIN = 1,
                         function(y, Xm = X){
