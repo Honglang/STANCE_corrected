@@ -1,0 +1,19 @@
+cff-version: 1.0.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Su
+    given-names: Haohao
+    orcid: https://orcid.org/0009-0007-7754-8153
+  - family-names: Wu
+    given-names: Yuesong
+  - family-names: Chen
+    given-names: Bin
+    orcid: https://orcid.org/0000-0001-8858-874X
+  - family-names: Cui
+    given-names: Yuehua
+title: "STANCE: a unified statistical model to detect cell-type-specific spatially variable genes in spatial transcriptomics"
+version: 1.0.0
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.14768010
+date-released: 2025-01-29
